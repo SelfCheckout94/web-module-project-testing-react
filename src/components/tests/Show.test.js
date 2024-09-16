@@ -1,27 +1,72 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { queryAllByText, render, screen } from "@testing-library/react";
 
-import Show from './../Show';
+import React from "react";
+import Show from "./../Show";
+import userEvent from "@testing-library/user-event";
 
 const testShow = {
-    //add in approprate test data structure here.
-}
+  //add in approprate test data structure here.
+  name: "Stranger Things",
+  summary: "Some summary about this show",
+  seasons: [
+    {
+      id: 0,
+      name: "Season 1",
+      episodes: [],
+    },
+    {
+      id: 1,
+      name: "Season 2",
+      episodes: [],
+    },
+    {
+      id: 2,
+      name: "Season 3",
+      episodes: [],
+    },
+    {
+      id: 3,
+      name: "Season 4",
+      episodes: [],
+    },
+  ],
+};
 
-test('renders testShow and no selected Season without errors', ()=>{
+test("renders testShow and no selected Season without errors", () => {
+  render(<Show show={testShow} selectedSeason={"none"} />);
 });
 
-test('renders Loading component when prop show is null', () => {
+test("renders Loading component when prop show is null", () => {
+  render(<Show show={null} selectedSeason={"none"} />);
+  const loading = screen.queryByText("Fetching data...");
+  expect(loading).toBeInTheDocument();
 });
 
-test('renders same number of options seasons are passed in', ()=>{
+test("renders same number of options seasons are passed in", () => {
+  render(<Show show={testShow} selectedSeason={"none"} />);
+  const seasonsSelect = screen.getByTestId("seaonsSelect");
+  userEvent.click(seasonsSelect);
+  const season1 = screen.queryByText("Season 1");
+  const season2 = screen.queryByText("Season 2");
+  const season3 = screen.queryByText("Season 3");
+  const season4 = screen.queryByText("Season 4");
+  expect(season1).toBeInTheDocument();
+  expect(season2).toBeInTheDocument();
+  expect(season3).toBeInTheDocument();
+  expect(season4).toBeInTheDocument();
 });
 
-test('handleSelect is called when an season is selected', () => {
+test("handleSelect is called when an season is selected", () => {
+  const mockHandleSelect = jest.fn();
+  render(<Show show={testShow} selectedSeason={"none"} />);
+  const seasonsSelect = screen.getByTestId("seaonsSelect");
+  userEvent.click(seasonsSelect);
+  const seasonOption = screen.getByTestId("season-option");
+  // userEvent.click(seasonOption);
+  expect(seasonOption).toBeInTheDocument();
 });
 
-test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
-});
+test("component renders when no seasons are selected and when rerenders with a season passed in", () => {});
 
 //Tasks:
 //1. Build an example data structure that contains the show data in the correct format. A show should contain a name, a summary and an array of seasons, each with a id, name and (empty) list of episodes within them. Use console.logs within the client code if you need to to verify the structure of show data.

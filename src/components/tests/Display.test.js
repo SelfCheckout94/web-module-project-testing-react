@@ -1,17 +1,10 @@
+import Display from "./../Display";
+import React from "react";
+import { render } from "@testing-library/react";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+test("Component renders on screen without errors", () => {
+  render(<Display />);
+});
 
 ///Tasks:
 //1. Add in nessisary imports and values to establish the testing suite.
